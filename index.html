@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="theme-color" content="#080d16">
+
+<title>EDITH AI</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+
+ margin:0;background:#080d16;color:#dff4ff;
+
+ font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+
+ min-height:100vh;padding:25px 18px;
+
+}
+
+header{display:flex;justify-content:space-between;align-items:center}
+
+.logo{font-size:29px;font-weight:800;letter-spacing:5px;color:#65caff}
+
+.status{font-size:10px;color:#55d6ad;letter-spacing:2px}
+
+main{max-width:500px;margin:55px auto 0;text-align:center}
+
+.core{
+
+ width:190px;height:190px;margin:0 auto 28px;
+
+ border:1px solid #2376a5;border-radius:50%;
+
+ display:grid;place-items:center;position:relative;
+
+ box-shadow:0 0 35px #167bb455,inset 0 0 35px #167bb433;
+
+}
+
+.core:before,.core:after{
+
+ content:"";position:absolute;border:1px dashed #3a9dcc;
+
+ border-radius:50%;inset:13px;animation:spin 18s linear infinite;
+
+}
+
+.core:after{inset:29px;animation-direction:reverse}
+
+.eye{
+
+ width:85px;height:85px;border-radius:50%;
+
+ background:radial-gradient(circle,#b8efff,#168ac4 35%,#09243e 70%);
+
+ box-shadow:0 0 35px #36baff;
+
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+h1{font-size:25px;letter-spacing:5px;margin:10px}
+
+.sub{color:#7199b5;font-size:12px;letter-spacing:2px}
+
+.panel{
+
+ margin-top:38px;text-align:left;padding:18px;
+
+ border:1px solid #1d405b;border-radius:14px;
+
+ background:#0e1927;
+
+}
+
+.caption{font-size:10px;color:#63caff;letter-spacing:2px}
+
+#answer{font-size:14px;line-height:1.6;margin-top:12px}
+
+input{
+
+ width:100%;margin-top:20px;padding:16px;
+
+ border-radius:10px;border:1px solid #28516e;
+
+ background:#0c1724;color:white;font-size:16px;
+
+ outline:none;
+
+}
+
+button{
+
+ width:100%;margin-top:10px;padding:16px;
+
+ border:1px solid #398fc1;border-radius:10px;
+
+ background:#123b59;color:#bceaff;
+
+ font-size:14px;font-weight:700;
+
+}
+
+button:active{background:#205c83}
+
+footer{text-align:center;margin-top:35px;color:#45647d;font-size:10px;letter-spacing:2px}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+ <div class="logo">EDITH</div>
+
+ <div class="status">● SYSTEM ONLINE</div>
+
+</header>
+
+<main>
+
+ <div class="core"><div class="eye"></div></div>
+
+ <h1>GOOD EVENING</h1>
+
+ <div class="sub">PERSONAL AI ASSISTANT</div>
+
+ <div class="panel">
+
+  <div class="caption">EDITH · SYSTEM RESPONSE</div>
+
+  <div id="answer">Система активна. Ожидаю ваших распоряжений, сэр.</div>
+
+ </div>
+
+ <input id="command" placeholder="Введите команду..." autocomplete="off">
+
+ <button onclick="send()">ПЕРЕДАТЬ КОМАНДУ</button>
+
+ <button onclick="listen()">ГОЛОСОВАЯ АКТИВАЦИЯ</button>
+
+</main>
+
+<footer>E.D.I.T.H. · PROTOTYPE 01</footer>
+
+<script>
+
+function reply(text){
+
+ document.getElementById('answer').textContent=text;
+
+}
+
+function send(){
+
+ const input=document.getElementById('command');
+
+ const text=input.value.trim().toLowerCase();
+
+ if(!text)return;
+
+ if(text.includes('привет')){
+
+  reply('Здравствуйте, сэр. Все системы функционируют штатно.');
+
+ }else if(text.includes('время')){
+
+  reply('Текущее время: '+new Date().toLocaleTimeString('ru-RU')+'.');
+
+ }else if(text.includes('статус')){
+
+  reply('Основное ядро активно. Ожидаю подключения внешних модулей.');
+
+ }else{
+
+  reply('Команда получена. Для выполнения необходимо подключить искусственный интеллект.');
+
+ }
+
+ input.value='';
+
+}
+
+function listen(){
+
+ const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+ if(!Speech){reply('Голосовое распознавание пока не поддерживается этим браузером.');return;}
+
+ const recognition=new Speech();
+
+ recognition.lang='ru-RU';
+
+ recognition.onresult=e=>{
+
+  document.getElementById('command').value=e.results[0][0].transcript;
+
+  send();
+
+ };
+
+ recognition.onerror=()=>reply('Не удалось распознать речь. Попробуйте ещё раз.');
+
+ recognition.start();
+
+}
+
+document.getElementById('command').addEventListener('keydown',e=>{
+
+ if(e.key==='Enter')send();
+
+});
+
+</script>
+
+</body>
+
+</html>
